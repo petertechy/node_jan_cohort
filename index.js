@@ -1,8 +1,21 @@
 const express = require('express')
 const app = express()
 const ejs = require('ejs')
+const mongoose = require('mongoose')
 app.use(express.urlencoded({extended:true}))
 app.set("view engine", "ejs")
+
+const URI = "mongodb+srv://ikolabaolanrewaju:olanrewaju09@cluster0.3jaoi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+//URI - Uniform Resource Identifier
+//connect to mongodb
+mongoose.connect(URI)
+.then(()=>{
+     console.log("Mongodb has started successfully")
+})
+.catch((err)=>{
+    console.log("This is an error ", err)
+})
 
 
 const PORT = 5500
@@ -40,7 +53,8 @@ app.post('/register', (req,res)=>{
     // console.log("It is working for register")
     console.log(req.body)
     allUsers.push(req.body)
-    res.send("User Info Submitted")
+    // res.send("User Info Submitted")
+    res.redirect('/dashboard')
 })
 
 app.listen(PORT, ()=>{
