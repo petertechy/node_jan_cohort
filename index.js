@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 app.use(express.urlencoded({extended:true}))
 app.set("view engine", "ejs")
 
-const URI = "mongodb+srv://ikolabaolanrewaju:olanrewaju09@cluster0.3jaoi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const URI = "mongodb+srv://ikolabaolanrewaju:olanrewaju09@cluster0.3jaoi.mongodb.net/user_info?retryWrites=true&w=majority&appName=Cluster0"
 
 //URI - Uniform Resource Identifier
 //connect to mongodb
@@ -19,6 +19,21 @@ mongoose.connect(URI)
 
 
 const PORT = 5500
+
+let userSchema = mongoose.Schema({
+    firstName: {type:String, required:true},
+    lastName: {type:String, required:true},
+    email: {type:String, required:true},
+    age: {type: Number, required:true},
+    date_registered: {type: String, default: Date.now()},
+    password: {type: String, required: true}
+})
+
+
+let userModel = mongoose.model('registered_user', userSchema)
+
+
+
 
 let allUsers = []
 
@@ -49,12 +64,31 @@ app.get('/dashboard', (req, res)=>{
     res.render("dashboard", {name: "Tolu", gender: "male", allUsers})
 })
 
+app.get('/all-users', (req, res)=>{
+    userModel.find()
+    .then((users)=>{
+        console.log(users)
+        res.render("allUsers", {allUsers: users})
+    })
+  
+})
+
 app.post('/register', (req,res)=>{
     // console.log("It is working for register")
-    console.log(req.body)
-    allUsers.push(req.body)
+    let form = new userModel(req.body)
+    form.save()
+    .then(()=>{
+        console.log("User Info saved successfully")
+    })
+    .catch((err)=>{
+        console.log(err, "User Info not saved")
+    })
+    
+
+    // console.log(req.body)
+    // allUsers.push(req.body)
     // res.send("User Info Submitted")
-    res.redirect('/dashboard')
+    res.redirect('/all-users')
 })
 
 app.listen(PORT, ()=>{
