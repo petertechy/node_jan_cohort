@@ -9,8 +9,8 @@ const createUser = (req, res) =>{
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-              user: 'petertechy01@gmail.com',
-              pass: 'vzrk ilmj zvur wmme'
+              user: process.env.GMAIL_USER,
+              pass: process.env.GMAIL_PASS
             }
           });
           
@@ -29,7 +29,8 @@ const createUser = (req, res) =>{
             }
           });
 
-        res.redirect('/user/all-users')
+        // res.redirect('/user/all-users')
+        res.send({message: "Succefully registered", form})
     })
     .catch((err)=>{
         console.log(err, "User Info not saved")
@@ -40,7 +41,8 @@ const fetchUsers = (req, res) =>{
     userModel.find()
     .then((users)=>{
         console.log(users)
-        res.render("allUsers", {allUsers: users})
+        res.send({status: true, users})
+        // res.render("allUsers", {allUsers: users})
     })
 }
 
