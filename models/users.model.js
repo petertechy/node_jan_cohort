@@ -5,7 +5,7 @@ let userSchema = mongoose.Schema({
     lastName: {type:String, required:true},
     email: {type:String, required:true, unique:true},
     age: {type: Number, required:true},
-    date_registered: {type: String, default: Date.now()},
+    date_registered: {type: Date, default: Date.now()},
     password: {type: String, required: true}
 })
 
