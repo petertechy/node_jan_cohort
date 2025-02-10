@@ -1,15 +1,30 @@
-const mongoose = require('mongoose')
-
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 let userSchema = mongoose.Schema({
-    firstName: {type:String, required:true},
-    lastName: {type:String, required:true},
-    email: {type:String, required:true, unique:true},
-    age: {type: Number, required:true},
-    date_registered: {type: Date, default: Date.now()},
-    password: {type: String, required: true}
-})
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  age: { type: Number, required: true },
+  date_registered: { type: Date, default: Date.now() },
+  password: { type: String, required: true },
+});
 
+let saltRound = 10;
 
-let userModel = mongoose.model('registered_user', userSchema)
+userSchema.pre("save", function (next) {
+  bcrypt.hash(this.password, saltRound, (err, hashedPassword) => {
+    // console.log(this.password);
+    // console.log(hashedPassword)
+    if(err){
+        console.log(err, "There is an error")
+    }else{
+        this.password = hashedPassword
+        console.log(this.password)
+        next()
+    }
+  });
+});
 
-module.exports = userModel
+let userModel = mongoose.model("registered_user", userSchema);
+
+module.exports = userModel;
