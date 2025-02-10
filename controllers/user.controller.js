@@ -5,8 +5,8 @@ const createUser = (req, res) =>{
     form.save()
     .then(()=>{
       console.log("User Info saved successfully")
-      console.log(req.body)
-      res.send({message: "Successfully registered", form})
+      console.log(form)
+      res.send({message: "Successfully registered", status: 200})
 
         // var transporter = nodemailer.createTransport({
         //     service: 'gmail',
