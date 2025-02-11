@@ -6,7 +6,7 @@ const createUser = (req, res) =>{
     .then(()=>{
       console.log("User Info saved successfully")
       console.log(form)
-      res.send({message: "Successfully registered", status: 200})
+      res.send({message: "Successfully registered", status: true})
 
         // var transporter = nodemailer.createTransport({
         //     service: 'gmail',
@@ -35,7 +35,7 @@ const createUser = (req, res) =>{
     })
     .catch((err)=>{
         console.log(err, "User Info not saved")
-        res.status(500).send({ error: err.message });
+        res.send({ error: err.message, status: false, message: "Invalid Response" });
     })
 }
 
@@ -53,7 +53,19 @@ const fetchUsers = (req, res) =>{
 }
 
 const signInUser = (req, res) =>{
+  console.log(req.body)
+  userModel.findOne({email: req.body.email})
+  .then((response)=>{
+    console.log(response)
+    if(response){
 
+    }else{
+      console.log("Invalid Email")
+    }
+  })
+  .catch((err)=>{
+    console.log("error is happening", err)
+  })
 }
 
 const deleteUser = async (req, res)=>{
