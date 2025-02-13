@@ -54,13 +54,27 @@ const fetchUsers = (req, res) =>{
 
 const signInUser = (req, res) =>{
   console.log(req.body)
+  let {password} = req.body
   userModel.findOne({email: req.body.email})
-  .then((response)=>{
-    console.log(response)
-    if(response){
+  .then((user)=>{
+    // console.log(response)
+    if(user){
+      // res.send({status:true, message: "right credentials"})
+      // console.log(user)
+      user.validatePassword(password, (err, same)=>{
+        // console.log(password)
+        // console.log(same)
+        if(!same){
+          res.send({status: false, message: "Wrong Credential"})
+        }else{
+          res.send({status: true, message: "Right Credential"})
+          
+        }
+      })
 
     }else{
       console.log("Invalid Email")
+      res.send({status:false, message: "wrong credentials"})
     }
   })
   .catch((err)=>{
