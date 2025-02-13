@@ -26,6 +26,9 @@ mongoose.connect(URI)
     console.log("This is an error ", err)
 })
 const PORT = 5500
+app.get('/', (req,res)=>{
+    
+})
 app.listen(PORT, ()=>{
     console.log("It is working on port" + PORT)
 })
