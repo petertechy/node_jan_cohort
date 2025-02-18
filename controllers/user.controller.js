@@ -1,5 +1,6 @@
 const userModel = require('../models/users.model')
 const nodemailer = require('nodemailer')
+const jwt = require('jsonwebtoken')
 const createUser = (req, res) =>{
     let form = new userModel(req.body)
     form.save()
@@ -67,8 +68,9 @@ const signInUser = (req, res) =>{
         if(!same){
           res.send({status: false, message: "Wrong Credential"})
         }else{
-          res.send({status: true, message: "Right Credential"})
-          
+          let token = jwt.sign({email: req.body.email}, "secret", {expiresIn:"1h"})
+          console.log(token)
+          res.send({status: true, message: "Right Credential", token})
         }
       })
 
@@ -116,6 +118,22 @@ const updateUser = async (req, res)=>{
   
 }
 
+const getdashboard = (req, res) =>{
+  // console.log(res)
+  let token = req.headers.authorization.split(' ')[1]
+  jwt.verify(token, "secret", (err, result)=>{
+    if(err){
+      // console.log(err)
+      res.send({status: false, message: "Invalid token or expired"})
+    }else{
+      // console.log(result)
+      res.send({status: true, message: "token is valid"})
+
+    }
+  })
+  // console.log(token)
+}
 
 
-module.exports = {createUser, signInUser, fetchUsers, deleteUser, updateUser}
+
+module.exports = {createUser, signInUser, fetchUsers, deleteUser, updateUser, getdashboard}

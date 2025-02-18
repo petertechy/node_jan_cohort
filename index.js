@@ -6,6 +6,7 @@ const app = express()
 const ejs = require('ejs')
 const dotenv = require("dotenv")
 const cors = require("cors")
+const greeters = require('greet-users-package')
 dotenv.config()
 const mongoose = require('mongoose')
 const userRoute = require('./routes/user.route')
@@ -18,6 +19,8 @@ const URI = process.env.MONGO_DB_URI
 //environment variable
 //URI - Uniform Resource Identifier
 //connect to mongodb
+console.log(greeters("Olanrewaju"))
+
 mongoose.connect(URI)
 .then(()=>{
      console.log("Mongodb has started successfully")

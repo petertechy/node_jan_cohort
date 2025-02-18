@@ -1,6 +1,6 @@
 const express = require('express')
 const Router = express.Router()
-const {createUser, fetchUsers, deleteUser, updateUser, signInUser} = require('../controllers/user.controller')
+const {createUser, fetchUsers, deleteUser, updateUser, signInUser, getdashboard} = require('../controllers/user.controller')
 
 Router.get('/', (req, res)=>{
     // res.send("Welcome to Node class")
@@ -24,5 +24,6 @@ Router.post('/register', createUser)
 Router.post("/delete/:id",deleteUser);
 Router.post("/edit/:id", updateUser)
 Router.post('/signin', signInUser)
+Router.get('/getdashboard', getdashboard)
 
 module.exports = Router
