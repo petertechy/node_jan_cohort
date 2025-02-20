@@ -1,3 +1,11 @@
+const cloudinary = require("cloudinary")
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET
+});
+
 const userModel = require('../models/users.model')
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
@@ -44,8 +52,9 @@ const fetchUsers = (req, res) =>{
     userModel.find()
     .then((users)=>{
         console.log(users)
-        // res.send({status: true, users})
-        res.render("allUsers", {allUsers: users})
+        res.send({status: true, users})
+        // res.render("allUsers", {allUsers: users})
+
     })
     .catch((err) => {
       console.error("Error fetching users:", err);
@@ -134,6 +143,20 @@ const getdashboard = (req, res) =>{
   // console.log(token)
 }
 
+const uploadFile = (req,res)=>{
+  let myfile = req.body.file
+  cloudinary.v2.uploader.upload(myfile, (err, result)=>{
+    if(err){
+      console.log("File could not be uploaded")
+      res.send({status: false, message: "Unable to upload file"})
+    }else{
+      let imageUrl = result.secure_url
+      res.send({status: true, message: "File uploaded successfully", imageUrl})
+
+    }
+  })
+}
 
 
-module.exports = {createUser, signInUser, fetchUsers, deleteUser, updateUser, getdashboard}
+
+module.exports = {createUser, signInUser, fetchUsers, deleteUser, updateUser, getdashboard, uploadFile}
