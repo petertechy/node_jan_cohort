@@ -23,7 +23,7 @@ console.log(greeters("Olanrewaju"))
 
 mongoose.connect(URI)
 .then(()=>{
-     console.log("Mongodb has started successfully")
+     console.log("Mongodb has started successfully here")
 })
 .catch((err)=>{
     console.log("This is an error ", err)
@@ -32,6 +32,24 @@ const PORT = 5500
 app.get('/', (req,res)=>{
     
 })
-app.listen(PORT, ()=>{
+
+let connection = app.listen(PORT, ()=>{
     console.log("It is working on port" + PORT)
+})
+
+let socketClient = require("socket.io")
+let io = socketClient(connection, {
+    cors: {origin: "*"}
+})
+
+io.on("connection", (socket)=>{
+    // console.log("A user connected successfully")
+    console.log(socket.id)
+    socket.on("sendMsg",(message)=>{
+        console.log(message)
+        io.emit("broadcastMsg", message)
+    })
+    socket.on('disconnect', () => {
+        // console.log('user disconnected');
+      });
 })
